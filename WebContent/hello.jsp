@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>MobileBanking Application JSP Page</title>
+    <title>MobileBanking Application</title>
   </head>
 
   <body bgcolor=white>
@@ -11,7 +11,7 @@
         <img src="images/springsource.png">
       </td>
       <td>
-         <h1>MobileBanking Application JSP Page</h1>
+         <h1>MobileBanking Application</h1>
       </td>
     </tr>
   </table>
