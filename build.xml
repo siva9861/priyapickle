@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MobileBanking" basedir="." default="all">
+
+	<property environment="env" />
+	<property name="source.dir" value="src" />
+	<property name="web.dir" value="WebContent" />
+	<property name="war.dir" value="wars" />
+	
+	<tstamp>
+	    <format property="today" pattern="yyyyMMddhhmm" locale="en,GB"/>
+	  </tstamp>
+
+	
+	<path id="project_classpath">
+		<pathelement path="${env.CLASSPATH}"/>
+		<pathelement path="${web.dir}/WEB-INF/lib/servlet-api-2.5.jar"/>
+	</path>
+	
+	<target name="clean">
+		<delete dir="${web.dir}/WEB-INF/classes" />
+		<sleep seconds="10"/>
+	</target>
+	
+	<target name="prepare">
+		<mkdir dir="${web.dir}/WEB-INF/classes"/>
+		<mkdir dir="${war.dir}"/>
+		</target>
+	
+	<target name="compile">
+		<javac srcdir="${source.dir}" destdir="${web.dir}/WEB-INF/classes" classpathref="project_classpath"/>
+		<copy todir="${web.dir}/WEB-INF/classes">
+			<fileset dir="${source.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="package">
+		<war basedir="${web.dir}" destfile="${war.dir}/mobilebanking_${today}.war" />
+		</target>
+	
+	<!-- <target name="all" depends="clean,prepare,compile,package" /> -->
+	
+	<target name="all" >
+		<antcall target="clean" />
+		<antcall target="prepare" />
+		<antcall target="compile" />
+		<antcall target="package" />
+	</target>
+	
+	<target name="exe-deploy" >
+		<ant antfile="deploy.xml" />
+	</target>
+	
+	<target name="check" >
+		<condition property="check.availablilty">
+			<available file="${war.dir}" type="dir" />		
+		</condition>
+		<antcall target="dir-available" />
+		<antcall target="dir-not-available" />
+	</target>
+	<target name="dir-available" if="check.availablilty">
+		<echo>${war.dir} is available </echo>
+	</target>
+	<target name="dir-not-available" unless="check.availablilty" >
+		<mkdir dir="${war.dir}" />
+		</target>
+	
+	<target name="test" >
+		<tar basedir="${war.dir}" destfile="${war.dir}.tar" />
+		<scp file="${war.dir}.tar" todir="user:password@somehost:/home/chuck"/>
+	</target>
+
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="DeployMobileBanking" basedir="." default="deploy-all">
+
+	<import file="build.xml" />
+	<property file="deploy.properties" />
+	
+	<target name="deploy" >
+		<copy file="${war.dir}/mobilebanking.war" todir="${server.home}/webapps" /> 
+	</target>
+	
+	<target name="undeploy">
+			<delete file="${server.home}/webapps/mobilebanking.war" /> 
+		</target>
+	
+	<target name="stop">
+		<exec executable="${server.home}/bin/shutdown.${os.type}" />
+	</target>
+	
+	<target name="start">
+			<exec executable="${server.home}/bin/startup.${os.type}" />
+		</target>
+	<target name="deploy-all" depends="stop,undeploy,deploy,start" />
+	
+	<target name="deploy-was">
+		<exec  executable="deploy.sh" >
+		<arg line="${server} ${appname}" />	
+		</exec>
+	</target>
+
+</project>
